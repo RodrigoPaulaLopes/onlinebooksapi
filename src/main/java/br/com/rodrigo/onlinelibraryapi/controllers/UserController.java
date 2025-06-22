@@ -7,7 +7,6 @@ import org.springframework.data.domain.Pageable;
 import br.com.rodrigo.onlinelibraryapi.services.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
 
 import br.com.rodrigo.onlinelibraryapi.dtos.CreateUserDto;
 import br.com.rodrigo.onlinelibraryapi.entities.User;
