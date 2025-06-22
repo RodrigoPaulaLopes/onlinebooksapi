@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 
 import br.com.rodrigo.onlinelibraryapi.dtos.CreateUserDto;
 import br.com.rodrigo.onlinelibraryapi.dtos.ListUserDto;
-import br.com.rodrigo.onlinelibraryapi.entities.User;
 
 @RestController
 @RequestMapping("/api/v1/user")
