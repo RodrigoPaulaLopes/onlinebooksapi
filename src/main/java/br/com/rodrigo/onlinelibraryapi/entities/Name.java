@@ -15,9 +15,9 @@ import lombok.Setter;
 public class Name {
     
 
-    @Column(nullable = true)
+    @Column(nullable = false)
     private String first_name;
 
-     @Column(nullable = true)
+    @Column(nullable = false)
     private String last_name;
 }
