@@ -5,9 +5,15 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import br.com.rodrigo.onlinelibraryapi.services.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriBuilder;
 import org.springframework.web.util.UriBuilderFactory;
@@ -15,14 +21,21 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.rodrigo.onlinelibraryapi.dtos.CreateUserDto;
 import br.com.rodrigo.onlinelibraryapi.dtos.ListUserDto;
+import br.com.rodrigo.onlinelibraryapi.exceptions.UniqueViolationException;
 
+@Tag(name = "Users", description = "managing user-related operations in the Online Library API. Provides endpoints to create, retrieve, update, and delete users.")
 @RestController
 @RequestMapping("/api/v1/user")
 public class UserController {
-    
+
     @Autowired
     private UserService userService;
 
+    @Operation(summary = "Creates a new user", responses = {
+            @ApiResponse(responseCode = "201", description = "Create a new user successfully.", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ListUserDto.class))),
+            @ApiResponse(responseCode = "409", description = "Email already exists", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UniqueViolationException.class))),
+            @ApiResponse(responseCode = "422", description = "Recurso não processado", content = @Content(mediaType = "application/json", schema = @Schema(implementation = MethodArgumentNotValidException.class)))
+    })
     @PostMapping
     public ResponseEntity<ListUserDto> create(@Valid @RequestBody CreateUserDto user, UriComponentsBuilder builder) {
         ListUserDto createdUser = userService.save(user);
@@ -60,8 +73,7 @@ public class UserController {
     public ResponseEntity<Void> delete(@PathVariable String id) {
         this.userService.delete(id);
         return ResponseEntity.noContent().build();
-  
-    }
 
+    }
 
 }
