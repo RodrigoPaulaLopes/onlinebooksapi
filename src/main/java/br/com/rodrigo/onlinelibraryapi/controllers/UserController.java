@@ -9,6 +9,9 @@ import jakarta.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriBuilder;
+import org.springframework.web.util.UriBuilderFactory;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.rodrigo.onlinelibraryapi.dtos.CreateUserDto;
 import br.com.rodrigo.onlinelibraryapi.dtos.ListUserDto;
@@ -21,9 +24,11 @@ public class UserController {
     private UserService userService;
 
     @PostMapping
-    public ResponseEntity<ListUserDto> create(@Valid @RequestBody CreateUserDto user) {
+    public ResponseEntity<ListUserDto> create(@Valid @RequestBody CreateUserDto user, UriComponentsBuilder builder) {
         ListUserDto createdUser = userService.save(user);
-        return ResponseEntity.ok(createdUser);
+
+        var uri = builder.path("/api/v1/user/{id}").buildAndExpand(createdUser.id()).toUri();
+        return ResponseEntity.created(uri).body(createdUser);
     }
 
     @GetMapping
