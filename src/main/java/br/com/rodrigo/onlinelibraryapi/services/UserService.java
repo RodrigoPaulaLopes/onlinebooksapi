@@ -30,11 +30,7 @@ public class UserService {
 
     public ListUserDto update(String id, CreateUserDto userDetails) {
         User user = this.userRepository.findById(id).get();
-
-        user.setName(userDetails.name());
-        user.setAddress(userDetails.address());
-        user.setAuthentication(userDetails.authentication());
-
+        user.update(userDetails);
         
         return new ListUserDto(this.userRepository.save(user));
     }
