@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 
 import br.com.rodrigo.onlinelibraryapi.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -45,6 +46,9 @@ public class UserController {
         return ResponseEntity.created(uri).body(createdUser);
     }
 
+    @Operation(summary = "Get all users", responses = {
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved list of users", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = ListUserDto.class))))
+    })
     @GetMapping
     public ResponseEntity<Page<ListUserDto>> index(Pageable page) {
         return ResponseEntity.ok(userService.findAll(page));
@@ -61,7 +65,7 @@ public class UserController {
     }
 
     @Operation(summary = "Update a user", responses = {
-            @ApiResponse(responseCode = "201", description = "Update user successfully.", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ListUserDto.class))),
+            @ApiResponse(responseCode = "200", description = "Update user successfully.", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ListUserDto.class))),
             @ApiResponse(responseCode = "409", description = "Email already exists", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UniqueViolationException.class))),
             @ApiResponse(responseCode = "422", description = "Recurso não processado", content = @Content(mediaType = "application/json", schema = @Schema(implementation = MethodArgumentNotValidException.class))),
             @ApiResponse(responseCode = "404", description = "User not found", content = @Content(mediaType = "application/json", schema = @Schema(implementation = EntityNotFoundException.class)))
