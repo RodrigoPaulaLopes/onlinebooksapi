@@ -60,15 +60,19 @@ public class UserController {
         return ResponseEntity.ok().body(user);
     }
 
+    @Operation(summary = "Update a user", responses = {
+            @ApiResponse(responseCode = "201", description = "Update user successfully.", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ListUserDto.class))),
+            @ApiResponse(responseCode = "409", description = "Email already exists", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UniqueViolationException.class))),
+            @ApiResponse(responseCode = "422", description = "Recurso não processado", content = @Content(mediaType = "application/json", schema = @Schema(implementation = MethodArgumentNotValidException.class))),
+            @ApiResponse(responseCode = "404", description = "User not found", content = @Content(mediaType = "application/json", schema = @Schema(implementation = EntityNotFoundException.class)))
+
+    })
     @PutMapping("/{id}")
     public ResponseEntity<ListUserDto> update(@PathVariable String id, @Valid @RequestBody CreateUserDto user) {
         ListUserDto updatedUser = userService.update(id, user);
-        if (updatedUser != null) {
-            return ResponseEntity.ok(updatedUser);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        return ResponseEntity.ok().body(updatedUser);
     }
+
     @Operation(summary = "Delete a user by id", responses = {
             @ApiResponse(responseCode = "200", description = "Delete a user successfully.", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ListUserDto.class))),
             @ApiResponse(responseCode = "404", description = "User not found", content = @Content(mediaType = "application/json", schema = @Schema(implementation = EntityNotFoundException.class))),
