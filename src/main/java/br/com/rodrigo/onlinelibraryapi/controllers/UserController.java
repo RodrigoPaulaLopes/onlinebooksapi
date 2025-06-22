@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import br.com.rodrigo.onlinelibraryapi.dtos.CreateUserDto;
+import br.com.rodrigo.onlinelibraryapi.dtos.ListUserDto;
 import br.com.rodrigo.onlinelibraryapi.entities.User;
 
 @RestController
@@ -25,7 +26,7 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<User>> index(Pageable page) {
+    public ResponseEntity<Page<ListUserDto>> index(Pageable page) {
         return ResponseEntity.ok(userService.findAll(page));
     }
 
@@ -40,7 +41,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<User> update(@PathVariable String id, @RequestBody User user) {
+    public ResponseEntity<User> update(@PathVariable String id, @RequestBody CreateUserDto user) {
         User updatedUser = userService.update(id, user);
         if (updatedUser != null) {
             return ResponseEntity.ok(updatedUser);
