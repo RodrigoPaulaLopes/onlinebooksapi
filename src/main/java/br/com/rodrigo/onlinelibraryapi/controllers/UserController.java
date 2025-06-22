@@ -5,6 +5,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import br.com.rodrigo.onlinelibraryapi.services.UserService;
+import jakarta.validation.Valid;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,7 +21,7 @@ public class UserController {
     private UserService userService;
 
     @PostMapping
-    public ResponseEntity<ListUserDto> create(@RequestBody CreateUserDto user) {
+    public ResponseEntity<ListUserDto> create(@Valid @RequestBody CreateUserDto user) {
         ListUserDto createdUser = userService.save(user);
         return ResponseEntity.ok(createdUser);
     }
@@ -40,7 +42,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ListUserDto> update(@PathVariable String id, @RequestBody CreateUserDto user) {
+    public ResponseEntity<ListUserDto> update(@PathVariable String id, @Valid @RequestBody CreateUserDto user) {
         ListUserDto updatedUser = userService.update(id, user);
         if (updatedUser != null) {
             return ResponseEntity.ok(updatedUser);
