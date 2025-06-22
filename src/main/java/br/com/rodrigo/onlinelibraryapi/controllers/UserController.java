@@ -20,8 +20,8 @@ public class UserController {
     private UserService userService;
 
     @PostMapping
-    public ResponseEntity<User> create(@RequestBody CreateUserDto user) {
-        User createdUser = userService.save(user);
+    public ResponseEntity<ListUserDto> create(@RequestBody CreateUserDto user) {
+        ListUserDto createdUser = userService.save(user);
         return ResponseEntity.ok(createdUser);
     }
 
@@ -31,8 +31,8 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> show(@PathVariable String id) {
-        User user = userService.findById(id);
+    public ResponseEntity<ListUserDto> show(@PathVariable String id) {
+        ListUserDto user = userService.findById(id);
         if (user != null) {
             return ResponseEntity.ok(user);
         } else {
@@ -41,8 +41,8 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<User> update(@PathVariable String id, @RequestBody CreateUserDto user) {
-        User updatedUser = userService.update(id, user);
+    public ResponseEntity<ListUserDto> update(@PathVariable String id, @RequestBody CreateUserDto user) {
+        ListUserDto updatedUser = userService.update(id, user);
         if (updatedUser != null) {
             return ResponseEntity.ok(updatedUser);
         } else {

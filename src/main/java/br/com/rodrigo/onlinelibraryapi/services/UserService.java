@@ -23,15 +23,16 @@ public class UserService {
         return userRepository.findAll(pageable).map(ListUserDto::new);
     }
 
-    public User findById(String id) {
-        return userRepository.findById(id).get();
+    public ListUserDto findById(String id) {
+        return new ListUserDto(userRepository.findById(id).get());
     }
 
-    public User save(CreateUserDto user) {
-        return userRepository.save(new User(user));
+    public ListUserDto save(CreateUserDto user) {
+        User newUser = userRepository.save(new User(user));
+        return new ListUserDto(newUser);
     }
 
-    public User update(String id, CreateUserDto userDetails) {
+    public ListUserDto update(String id, CreateUserDto userDetails) {
         User user = this.userRepository.findById(id).get();
 
         user.setName(userDetails.name());
@@ -39,7 +40,7 @@ public class UserService {
         user.setAuthentication(userDetails.authentication());
 
         
-        return this.userRepository.save(user);
+        return new ListUserDto(this.userRepository.save(user));
     }
 
     public void delete(String id) {
