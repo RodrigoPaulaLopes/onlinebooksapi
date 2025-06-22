@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
@@ -49,14 +50,14 @@ public class UserController {
         return ResponseEntity.ok(userService.findAll(page));
     }
 
+    @Operation(summary = "Retrieves a user by id", responses = {
+            @ApiResponse(responseCode = "200", description = "Retrieves a user successfully.", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ListUserDto.class))),
+            @ApiResponse(responseCode = "404", description = "User not found", content = @Content(mediaType = "application/json", schema = @Schema(implementation = EntityNotFoundException.class))),
+    })
     @GetMapping("/{id}")
     public ResponseEntity<ListUserDto> show(@PathVariable String id) {
         ListUserDto user = userService.findById(id);
-        if (user != null) {
-            return ResponseEntity.ok(user);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        return ResponseEntity.ok().body(user);
     }
 
     @PutMapping("/{id}")
@@ -68,7 +69,10 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
     }
-
+    @Operation(summary = "Delete a user by id", responses = {
+            @ApiResponse(responseCode = "200", description = "Delete a user successfully.", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ListUserDto.class))),
+            @ApiResponse(responseCode = "404", description = "User not found", content = @Content(mediaType = "application/json", schema = @Schema(implementation = EntityNotFoundException.class))),
+    })
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable String id) {
         this.userService.delete(id);
